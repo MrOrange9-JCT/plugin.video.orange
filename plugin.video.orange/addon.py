@@ -7,21 +7,20 @@ addon_handle = int(sys.argv[1])
 
 xbmcplugin.setContent(addon_handle, "movies")
 
-def getMovieMetadata(tmdb_id, key):
+def getMovieMetadata(imdb_id, key):
     info = xbmc.InfoTagVideo()
 
-    info.setUniqueID(tmdb_id)
-    info.setDbId(tmdb_id)
+    info.setIMDBNumber(imdb_id)
     metadata = {"title": info.getTitle(),
                 "year": info.getYear(),
                 "genre": info.getGenres(),
-                "rating": info.getRating("tmdb"),
+                "rating": info.getRating("imdb"),
                 "plot": info.getPlot()}
     
     return metadata[key]
 
-# Movies along with their TMDB ID
-movies_list = {"matrix": "603"}
+# Movies along with their IMDB ID
+movies_list = {"matrix": "tt0133093"}
 
 movie = xbmcgui.ListItem(f"{getMovieMetadata(movies_list['matrix'], 'title')} [COLOR blue]({getMovieMetadata(movies_list['matrix'], 'year')})[/COLOR]")
 #movie.setInfo("video", {})
