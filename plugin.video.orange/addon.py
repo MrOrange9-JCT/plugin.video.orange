@@ -24,7 +24,9 @@ def getMovieMetadata(movie_title, requested_metadata):
                 "rating": r["vote_average"],
                 "duration": r["runtime"] + " min",
                 "tagline": r["tagline"],
-                "plot": r["overview"],}
+                "plot": r["overview"],
+                "poster": "https://www.themoviedb.org/t/p/original" + r["poster_path"],
+                "fanart": "https://www.themoviedb.org/t/p/original" + r["backdrop_path"]}
     
     return metadata[requested_metadata]
 
@@ -41,8 +43,8 @@ movie_list = getMovieList()
 movie = xbmcgui.ListItem(f"{getMovieMetadata('matrix', 'title')} [COLOR blue]({getMovieMetadata('matrix', 'year')})[/COLOR]")
 movie.setInfo("video", {})
 
-movie.setArt({"poster": "https://www.themoviedb.org/t/p/original/qK76PKQLd6zlMn0u83Ej9YQOqPL.jpg", 
-               "fanart": "https://www.themoviedb.org/t/p/original/y0jFVsgbvPE3AJqNxIPRhM7pWrO.jpg"})
+movie.setArt({"poster": getMovieMetadata('matrix', 'poster'), 
+              "fanart": getMovieMetadata('matrix', 'fanart')})
 
 url = "D:\Plex\Películas\Matrix (1999)\Matrix 1 - H265.mp4"
 
