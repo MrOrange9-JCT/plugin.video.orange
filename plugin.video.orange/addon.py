@@ -54,10 +54,9 @@ def getMovieAvailability(movie_url):
 
     response = requests.get(movie_url)
 
-    try:
-        if response["success"] == "false":
-            return False
-    except:
+    if response.status_code == 404:
+        return False
+    else:
         return True
 
 
