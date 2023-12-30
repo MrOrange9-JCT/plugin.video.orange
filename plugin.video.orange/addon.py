@@ -54,9 +54,10 @@ def getMovieAvailability(movie_url):
 
     response = requests.get(movie_url)
 
-    if response["success"] == "false":
-        return False
-    else:
+    try:
+        if response["success"] == "false":
+            return False
+    except:
         return True
 
 
