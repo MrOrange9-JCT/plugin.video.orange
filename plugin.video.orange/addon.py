@@ -101,8 +101,9 @@ for movie in movie_list:
 
     url = movie_list[movie][1]
     movie_metadata = getMovieMetadata(movie)
+    movie_available = getMovieAvailability(url)
 
-    if getMovieAvailability(url) == True:
+    if movie_available:
         list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR]")
     else:
         list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR] [COLOR red] - No disponible - [/COLOR]")
@@ -116,14 +117,10 @@ for movie in movie_list:
     list_item.setArt({"poster": getMovieMetadata(movie, 'poster'), 
                 "fanart": getMovieMetadata(movie, 'fanart')})
 
-
-
-    if getMovieAvailability(url) == True:
+    if movie_available:
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=list_item)
     else:
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=__url__, listitem=list_item)
         sendUnavailableNotification(movie_metadata['title'], movie_list[movie][1])
-
-
 
 xbmcplugin.endOfDirectory(addon_handle)
