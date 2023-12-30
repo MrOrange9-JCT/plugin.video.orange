@@ -53,10 +53,11 @@ def getMovieAvailability(movie_url):
     """Check if a movie is available"""
 
     response = requests.get(movie_url)
-    if response.status_code == 200:
-        return True
-    else:
+
+    if response["success"] == "false":
         return False
+    else:
+        return True
 
 
 def sendUnavailableNotification(movie_title, movie_url):
@@ -81,6 +82,8 @@ def sendUnavailableNotification(movie_title, movie_url):
 
     requests.post(url, json = data)
 
+    pass
+
 def updateMovieList():
     """Update the movie list on Rentry.co"""
     url = "https://rentry.co/OrangeAddon_movie_list/raw"
@@ -103,11 +106,13 @@ for movie in movie_list:
     movie_metadata = getMovieMetadata(movie)
     movie_available = getMovieAvailability(url)
 
+    print("Processing movie: " + movie_metadata['title'])
+
     if movie_available:
         list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR]")
     else:
-        list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR] [COLOR red] - No disponible - [/COLOR]")
-    
+        list_item = xbmcgui.ListItem(f"[COLOR silver]{movie_metadata['title']}[/COLOR] [COLOR steelblue]({movie_metadata['year']})[/COLOR] [COLOR red] [NO DISPONIBLE][/COLOR]")
+        
     list_item.setInfo("video", {"genre": movie_metadata['genres'],
                                 "rating": movie_metadata['rating'],
                                 "duration": movie_metadata['duration'],
@@ -116,11 +121,18 @@ for movie in movie_list:
 
     list_item.setArt({"poster": getMovieMetadata(movie, 'poster'), 
                 "fanart": getMovieMetadata(movie, 'fanart')})
-
-    if movie_available:
-        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=list_item)
-    else:
-        xbmcplugin.addDirectoryItem(handle=addon_handle, url=__url__, listitem=list_item)
+ 
+    if not movie_available:
+        list_item.setProperties({"IsPlayable": "false"})
         sendUnavailableNotification(movie_metadata['title'], movie_list[movie][1])
+        
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=None, listitem=list_item)
+
+    else:
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=list_item)
+
+    print("Finished processing movie: " + movie_metadata['title'])
+
+print("ALL MOVIES PROCESSED")    
 
 xbmcplugin.endOfDirectory(addon_handle)
