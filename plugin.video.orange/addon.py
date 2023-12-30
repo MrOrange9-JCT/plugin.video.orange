@@ -109,7 +109,7 @@ for movie in movie_list:
     movie_metadata = getMovieMetadata(movie)
     movie_available = getMovieAvailability(url)
 
-    print("Processing movie: " + movie_metadata['title'])
+    print("Processing movie: " + movie_metadata['title'] + " - Available: " + str(movie_available))
 
     if movie_available:
         list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR]")
