@@ -27,11 +27,8 @@ def getMovieMetadata(movie_title, requested_metadata = None):
         except:
             genres = [r["genres"][0]["name"]]
 
-    aired = r["release_date"].split("-")[0] + "-" + r["release_date"].split("-")[2] + "-" + r["release_date"].split("-")[1]
-
     metadata = {"title": r["title"],
                 "year": int(r["release_date"].split("-")[0]),
-                "aired": aired,
                 "genres": genres,
                 "rating": r["vote_average"],
                 "duration": r["runtime"] * 60,
@@ -119,7 +116,8 @@ for movie in movie_list:
     list_item.setInfo("video", {"genre": movie_metadata['genres'],
                                 "rating": movie_metadata['rating'],
                                 "duration": movie_metadata['duration'],
-                                "aired": movie_metadata['aired'],
+                                "year": movie_metadata['year'],
+                                "title": movie_metadata['title'],
                                 "sorttitle": movie,
                                 "plotoutline": movie_metadata['tagline'],
                                 "plot": f"[COLOR lime]{movie_metadata['rating']}[/COLOR] - [COLOR silver]{str(movie_metadata['genres'])[1:-1]}[/COLOR]\n[I]{movie_metadata['tagline']}[/I]\n\n{movie_metadata['plot']}"})
