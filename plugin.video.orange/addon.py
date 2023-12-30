@@ -119,8 +119,6 @@ for movie in movie_list:
     list_item.setInfo("video", {"genre": movie_metadata['genres'],
                                 "rating": movie_metadata['rating'],
                                 "duration": movie_metadata['duration'],
-                                "dateadded": movie_metadata['aired'],
-                                "aired": movie_metadata['aired'],
                                 "sorttitle": movie,
                                 "plotoutline": movie_metadata['tagline'],
                                 "plot": f"[COLOR lime]{movie_metadata['rating']}[/COLOR] - [COLOR silver]{str(movie_metadata['genres'])[1:-1]}[/COLOR]\n[I]{movie_metadata['tagline']}[/I]\n\n{movie_metadata['plot']}"})
