@@ -27,8 +27,11 @@ def getMovieMetadata(movie_title, requested_metadata = None):
         except:
             genres = [r["genres"][0]["name"]]
 
+    
+
     metadata = {"title": r["title"],
                 "year": int(r["release_date"].split("-")[0]),
+                "aired": r["release_date"],
                 "genres": genres,
                 "rating": r["vote_average"],
                 "duration": r["runtime"] * 60,
@@ -116,8 +119,8 @@ for movie in movie_list:
     list_item.setInfo("video", {"genre": movie_metadata['genres'],
                                 "rating": movie_metadata['rating'],
                                 "duration": movie_metadata['duration'],
-                                "year": movie_metadata['year'],
-                                "title": movie_metadata['title'],
+                                "dateadded": movie_metadata['aired'],
+                                "aired": movie_metadata['aired'],
                                 "sorttitle": movie,
                                 "plotoutline": movie_metadata['tagline'],
                                 "plot": f"[COLOR lime]{movie_metadata['rating']}[/COLOR] - [COLOR silver]{str(movie_metadata['genres'])[1:-1]}[/COLOR]\n[I]{movie_metadata['tagline']}[/I]\n\n{movie_metadata['plot']}"})
@@ -139,6 +142,5 @@ for movie in movie_list:
 print("ALL MOVIES PROCESSED")    
 
 xbmcplugin.addSortMethod(__handle__, xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE)
-xbmcplugin.addSortMethod(__handle__, xbmcplugin.SORT_METHOD_DATE)
 
 xbmcplugin.endOfDirectory(__handle__)
