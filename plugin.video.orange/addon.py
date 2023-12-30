@@ -4,10 +4,10 @@ import xbmcgui
 import xbmcplugin
 import requests
 
-addon_handle = int(sys.argv[1])
+__handle__ = int(sys.argv[1])
 __url__ = sys.argv[0]
 
-xbmcplugin.setContent(addon_handle, "movies")
+xbmcplugin.setContent(__handle__, "movies")
 
 def getMovieMetadata(movie_title, requested_metadata = None):
     """Get the metadata of a movie from TMDB"""
@@ -54,10 +54,13 @@ def getMovieAvailability(movie_url):
 
     response = requests.get(movie_url)
 
-    if response.status_code == 404:
+    try:
+        if response.status_code == 200:
+            return True
+        else:
+            return False
+    except:
         return False
-    else:
-        return True
 
 
 def sendUnavailableNotification(movie_title, movie_url):
@@ -98,7 +101,7 @@ def updateMovieList():
 movie_list = getMovieList()
 
 update_list = xbmcgui.ListItem("[COLOR lime] - Actualizar lista de películas - [/COLOR]")
-xbmcplugin.addDirectoryItem(handle=addon_handle, url=updateMovieList(), listitem=update_list, isFolder=True)
+xbmcplugin.addDirectoryItem(handle=__handle__, url=updateMovieList(), listitem=update_list, isFolder=True)
 
 for movie in movie_list:
 
@@ -116,6 +119,7 @@ for movie in movie_list:
     list_item.setInfo("video", {"genre": movie_metadata['genres'],
                                 "rating": movie_metadata['rating'],
                                 "duration": movie_metadata['duration'],
+                                "sorttitle": movie,
                                 "plotoutline": movie_metadata['tagline'],
                                 "plot": f"[COLOR lime]{movie_metadata['rating']}[/COLOR] - [COLOR silver]{str(movie_metadata['genres'])[1:-1]}[/COLOR]\n[I]{movie_metadata['tagline']}[/I]\n\n{movie_metadata['plot']}"})
 
@@ -126,13 +130,14 @@ for movie in movie_list:
         list_item.setProperties({"IsPlayable": "false"})
         sendUnavailableNotification(movie_metadata['title'], movie_list[movie][1])
         
-        xbmcplugin.addDirectoryItem(handle=addon_handle, url=None, listitem=list_item)
+        xbmcplugin.addDirectoryItem(handle=__handle__, url=None, listitem=list_item)
 
     else:
-        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=list_item)
+        xbmcplugin.addDirectoryItem(handle=__handle__, url=url, listitem=list_item)
 
     print("Finished processing movie: " + movie_metadata['title'])
 
 print("ALL MOVIES PROCESSED")    
 
-xbmcplugin.endOfDirectory(addon_handle)
+xbmcplugin.addSortMethod(__handle__, xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE)
+xbmcplugin.endOfDirectory(__handle__)
