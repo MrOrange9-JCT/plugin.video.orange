@@ -27,8 +27,11 @@ def getMovieMetadata(movie_title, requested_metadata = None):
         except:
             genres = [r["genres"][0]["name"]]
 
+    aired = r["release_date"].split("-")[0] + "-" + r["release_date"].split("-")[2] + "-" + r["release_date"].split("-")[1]
+
     metadata = {"title": r["title"],
                 "year": int(r["release_date"].split("-")[0]),
+                "aired": aired,
                 "genres": genres,
                 "rating": r["vote_average"],
                 "duration": r["runtime"] * 60,
@@ -52,15 +55,12 @@ def getMovieList():
 def getMovieAvailability(movie_url):
     """Check if a movie is available"""
 
-    response = requests.get(movie_url)
+    response = requests.get(movie_url + "/info")
 
-    try:
-        if response.status_code == 200:
-            return True
-        else:
-            return False
-    except:
+    if response.status_code == 404:
         return False
+    else:
+        return True
 
 
 def sendUnavailableNotification(movie_title, movie_url):
@@ -119,6 +119,7 @@ for movie in movie_list:
     list_item.setInfo("video", {"genre": movie_metadata['genres'],
                                 "rating": movie_metadata['rating'],
                                 "duration": movie_metadata['duration'],
+                                "aired": movie_metadata['aired'],
                                 "sorttitle": movie,
                                 "plotoutline": movie_metadata['tagline'],
                                 "plot": f"[COLOR lime]{movie_metadata['rating']}[/COLOR] - [COLOR silver]{str(movie_metadata['genres'])[1:-1]}[/COLOR]\n[I]{movie_metadata['tagline']}[/I]\n\n{movie_metadata['plot']}"})
@@ -140,4 +141,6 @@ for movie in movie_list:
 print("ALL MOVIES PROCESSED")    
 
 xbmcplugin.addSortMethod(__handle__, xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE)
+xbmcplugin.addSortMethod(__handle__, xbmcplugin.SORT_METHOD_DATE)
+
 xbmcplugin.endOfDirectory(__handle__)
