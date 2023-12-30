@@ -51,6 +51,7 @@ def getMovieList():
 
 def getMovieAvailability(movie_url):
     """Check if a movie is available"""
+
     response = requests.get(movie_url)
     if response.status_code == 200:
         return True
@@ -60,7 +61,7 @@ def getMovieAvailability(movie_url):
 
 def sendUnavailableNotification(movie_title, movie_url):
     """Send a notification to Discord when a movie is unavailable"""
-    
+
     url = "https://discord.com/api/webhooks/1190607394124877946/oHVLcPbfqm9dBYXPGFz-uzNXwNHNygvy8cG-gULW-VcRHe2QspYqpBNMT9TSaPeTz0dF"
 
     data = { 
@@ -99,9 +100,9 @@ xbmcplugin.addDirectoryItem(handle=addon_handle, url=updateMovieList(), listitem
 for movie in movie_list:
 
     url = movie_list[movie][1]
-    movie_metadata = getMovieMetadata(url)
+    movie_metadata = getMovieMetadata(movie)
 
-    if getMovieAvailability(movie) == True:
+    if getMovieAvailability(url) == True:
         list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR]")
     else:
         list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR] [COLOR red] - No disponible - [/COLOR]")
@@ -117,7 +118,7 @@ for movie in movie_list:
 
 
 
-    if getMovieAvailability(movie) == True:
+    if getMovieAvailability(url) == True:
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=list_item)
     else:
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=__url__, listitem=list_item)
