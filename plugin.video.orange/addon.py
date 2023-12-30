@@ -9,7 +9,8 @@ __url__ = sys.argv[0]
 
 xbmcplugin.setContent(addon_handle, "movies")
 
-def getMovieMetadata(movie_title, requested_metadata):
+def getMovieMetadata(movie_title, requested_metadata = None):
+    """Get the metadata of a movie from TMDB"""
 
     tmdb_id = movie_list[movie_title][0]
     api_key = "-706d6c75628138ee3084133305f15bf6-ee30841333e3084133305f15bf6"
@@ -18,9 +19,17 @@ def getMovieMetadata(movie_title, requested_metadata):
     response = requests.get(url)
     r = response.json()
 
+    try:
+        genres = [r["genres"][0]["name"], r["genres"][1]["name"], r["genres"][2]["name"]]
+    except:
+        try:
+            genres = [r["genres"][0]["name"], r["genres"][1]["name"]]
+        except:
+            genres = [r["genres"][0]["name"]]
+
     metadata = {"title": r["title"],
                 "year": int(r["release_date"].split("-")[0]),
-                "genres": r["genres"],
+                "genres": genres,
                 "rating": r["vote_average"],
                 "duration": r["runtime"] * 60,
                 "tagline": r["tagline"],
@@ -28,7 +37,10 @@ def getMovieMetadata(movie_title, requested_metadata):
                 "poster": "https://www.themoviedb.org/t/p/original" + r["poster_path"],
                 "fanart": "https://www.themoviedb.org/t/p/original" + r["backdrop_path"]}
     
-    return metadata[requested_metadata]
+    if requested_metadata != None:
+        return metadata[requested_metadata]
+    else:
+        return metadata
 
 def getMovieList():
     """"Get the updated movie list from Rentry.co"""
@@ -36,6 +48,37 @@ def getMovieList():
     response = requests.get(url)
 
     return response.json()
+
+def getMovieAvailability(movie_url):
+    """Check if a movie is available"""
+    response = requests.get(movie_url)
+    if response.status_code == 200:
+        return True
+    else:
+        return False
+
+
+def sendUnavailableNotification(movie_title, movie_url):
+    """Send a notification to Discord when a movie is unavailable"""
+    
+    url = "https://discord.com/api/webhooks/1190607394124877946/oHVLcPbfqm9dBYXPGFz-uzNXwNHNygvy8cG-gULW-VcRHe2QspYqpBNMT9TSaPeTz0dF"
+
+    data = { 
+    "content": "<@449992158729076746>",
+    "embeds": [
+        {
+        "title": "⛔ New unavailable link detected!",
+        "description": f"Movie: `{movie_title}`\nURL: `{movie_url}`",
+        "color": 16711680,
+        "author": {
+            "name": "OrangeAddon"
+        }
+        }
+    ],
+    "attachments": []
+    }
+
+    requests.post(url, json = data)
 
 def updateMovieList():
     """Update the movie list on Rentry.co"""
@@ -54,20 +97,32 @@ update_list = xbmcgui.ListItem("[COLOR lime] - Actualizar lista de películas - 
 xbmcplugin.addDirectoryItem(handle=addon_handle, url=updateMovieList(), listitem=update_list, isFolder=True)
 
 for movie in movie_list:
-    list_item = xbmcgui.ListItem(f"{getMovieMetadata(movie, 'title')} [COLOR blue]({getMovieMetadata(movie, 'year')})[/COLOR]")
-    list_item.setInfo("video", {"genre": getMovieMetadata(movie, 'genres'),
-                                "rating": getMovieMetadata(movie, 'rating'),
-                                "duration": getMovieMetadata(movie, 'duration'),
-                                "plotoutline": getMovieMetadata(movie, 'tagline'),
-                                "plot": getMovieMetadata(movie, 'plot'),
-                                "year": getMovieMetadata(movie, 'year'),
-                                "title": getMovieMetadata(movie, 'title'),})
+
+    url = movie_list[movie][1]
+    movie_metadata = getMovieMetadata(url)
+
+    if getMovieAvailability(movie) == True:
+        list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR]")
+    else:
+        list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR] [COLOR red] - No disponible - [/COLOR]")
+    
+    list_item.setInfo("video", {"genre": movie_metadata['genres'],
+                                "rating": movie_metadata['rating'],
+                                "duration": movie_metadata['duration'],
+                                "plotoutline": movie_metadata['tagline'],
+                                "plot": f"[COLOR lime]{movie_metadata['rating']}[/COLOR] - [COLOR silver]{str(movie_metadata['genres'])[1:-1]}[/COLOR]\n[I]{movie_metadata['tagline']}[/I]\n\n{movie_metadata['plot']}"})
 
     list_item.setArt({"poster": getMovieMetadata(movie, 'poster'), 
                 "fanart": getMovieMetadata(movie, 'fanart')})
 
-    url = movie_list[movie][1]
 
-    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=list_item)
+
+    if getMovieAvailability(movie) == True:
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=list_item)
+    else:
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=__url__, listitem=list_item)
+        sendUnavailableNotification(movie_metadata['title'], movie_list[movie][1])
+
+
 
 xbmcplugin.endOfDirectory(addon_handle)
