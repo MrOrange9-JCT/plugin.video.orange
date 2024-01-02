@@ -3,20 +3,24 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
+import xbmcvfs
 import requests
 import urllib
 import urllib.parse as urlparse
 from modules import movies
+
+xbmcaddon = xbmcaddon.Addon("plugin.video.orange")
 
 class Addon:
 
     __handle__ = int(sys.argv[1])
     __url__ = sys.argv[0]
     __args__ = urlparse.parse_qs(sys.argv[2][1:])
+    __addon_path__ = xbmcvfs.translatePath(xbmcaddon.getAddonInfo('path'))
         
 addon = Addon()
-xbmcaddon = xbmcaddon.Addon()
 __url__ = addon.__url__
+__addon_path__ = addon.__addon_path__
 __handle__ = addon.__handle__
 __args__ = addon.__args__
 
