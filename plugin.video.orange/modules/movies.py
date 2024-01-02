@@ -6,9 +6,9 @@ import xbmcplugin
 import xbmcaddon
 import xbmcvfs
 import requests
-import addon
+import main
 
-addon = addon.Addon()
+addon = main.Addon()
 xbmcaddon = xbmcaddon.Addon()
 __url__ = addon.__url__ #+ "?action=movies"
 __addon_path__ = addon.__addon_path__
@@ -50,17 +50,6 @@ def getMovieMetadata(movie_title, requested_metadata = None):
         return metadata[requested_metadata]
     else:
         return metadata
-    
-def getAddonMedia(media: str = None):
-    """Get the path of a media file from the add-on resources folder"""
-
-    if media != None:
-        if media != "fanart.png" or media != "icon.png":
-            return os.path.join(__addon_path__, "resources", "media", media)
-        else:
-            return os.path.join(__addon_path__, "resources", media)
-    else:
-        return None
 
 def getMovieList():
     """"Get the updated movie list from Rentry.co"""
@@ -164,10 +153,10 @@ def listMovies():
     print("ALL MOVIES PROCESSED") 
 
 
-def main(): 
+def _main(): 
     update_list = xbmcgui.ListItem("[COLOR lime] - Actualizar lista de películas - [/COLOR]")
-    update_icon = getAddonMedia("iconRefresh.png")
-    update_list.setArt({"thumb": update_icon, "icon": update_icon, "fanart": getAddonMedia("fanart.png")})
+    update_icon = main.getAddonMedia("iconRefresh.png")
+    update_list.setArt({"thumb": update_icon, "icon": update_icon, "fanart": main.getAddonMedia("fanart.png")})
     print("Fanart: " + xbmcaddon.getAddonInfo('fanart'))
 
     xbmcplugin.addDirectoryItem(handle=__handle__, url=updateMovieList(), listitem=update_list, isFolder=True)

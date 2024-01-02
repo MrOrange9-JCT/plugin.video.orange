@@ -1,5 +1,6 @@
 import sys
 import xbmc
+import os
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
@@ -29,6 +30,17 @@ xbmcplugin.setContent(__handle__, "movies")
 def buildUrl(query):
     return __url__ + '?' + urllib.urlencode(query)
 
+def getAddonMedia(media: str = None):
+    """Get the path of a media file from the add-on resources folder"""
+
+    if media != None:
+        if media != "fanart.png" or media != "icon.png":
+            return os.path.join(__addon_path__, "resources", "media", media)
+        else:
+            return os.path.join(__addon_path__, "resources", media)
+    else:
+        return None
+
 def mainMenu():
     """Main menu"""
     xbmcplugin.addDirectoryItem(__handle__, __url__ + "?folder=movies", xbmcgui.ListItem("Películas"), isFolder=True)
@@ -47,4 +59,4 @@ if __name__ == "__main__":
 
     if button == "settings":
         xbmcaddon.openSettings()"""
-    movies.main()
+    movies._main()
