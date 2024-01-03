@@ -9,7 +9,7 @@
 - [x] 🔄 Botón para actualizar de la lista de películas
 - [x] ⏩ Avance/retroceso fluido
 - [x] ⏳ Ventana de progreso al procesar películas
-- [x] ✨ Calidad HD y *4K (Próximamente)*
+- [x] ✨ Calidad Full HD y *4K (Próximamente)*
 ##### En desarollo
 - [ ] Menú principal
 - [ ] Varios hostings de archivos
