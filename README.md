@@ -12,8 +12,8 @@ Manera recomendada para la instalación del add-on. Instalando el add-on de esta
 6. Pulsamos **OK**.
 7. Volvemos al menú principal de **Ajustes**.
 8. Ahora hacemos clic en **Add-ons > Instalar desde archivo .zip**.
-   > [!NOTE]
-   >  Si es la primera vez que instalamos un Add-on, debemos activar la opción **Instalar desde orígenes desconocidos** en **Ajustes > Sistema > Add-ons**.
+> [!NOTE]
+>  Si es la primera vez que instalamos un Add-on, debemos activar la opción **Instalar desde orígenes desconocidos** en **Ajustes > Sistema > Add-ons**.
 9. En la ventana, seleccionamos la fuente **repository.orangeaddon**.
 10. Elegimos el **archivo .zip** más reciente y esperamos a que se instale.
 11. Una vez instalado el repositorio nos debería salir una notificación comforme se ha instalado correctamente.
