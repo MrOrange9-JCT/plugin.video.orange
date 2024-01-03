@@ -2,6 +2,7 @@
 ![](https://img.shields.io/badge/dynamic/xml?label=Versi%C3%B3n&style=flat-square&query=%2F%2Faddon%2F%40version&url=https%3A%2F%2Fraw.githubusercontent.com%2FMrOrange9-JCT%2Fplugin.video.orange%2Fmain%2Fplugin.video.orange%2Faddon.xml)
 **Orange Add-on** es un addon enfocado a la simplicidad y facilidad de su uso. Cuenta con una interfaz fácil de mavegar y poco sobrecargada.
 
+#### Características
 - [x] Interfaz fácil de usar
 - [x] Soporte completo de la API de metadatos TMDB *(pósters, fanarts, descripciones, valoraciones...)*
 - [x] Detección de enlaces no disponibles (offline)
@@ -9,10 +10,10 @@
 - [x] Avance/retroceso rápido
 - [x] Ventana de progreso al procesar películas
 - [x] Calidad HD y *4K (Próximamente)*
-#### En desarollo
+##### En desarollo
 - [ ] Menú principal
 - [ ] Varios hostings de archivos
-#### Próximamente
+##### Próximamente
 - [ ] Búsqueda por nombre
 - [ ] Buscador por categorías *(A-Z, año, actor, género...)*
 - [ ] Nuevos órdenes *(Fecha, calidad, valoración...)*
