@@ -3,13 +3,13 @@
 **Orange Add-on** es un addon enfocado a la simplicidad y facilidad de su uso. Cuenta con una interfaz fácil de mavegar y poco sobrecargada.
 
 #### Características
-- [x] Interfaz fácil de usar
-- [x] Soporte completo de la API de metadatos TMDB *(pósters, fanarts, descripciones, valoraciones...)*
-- [x] Detección de enlaces no disponibles (offline)
-- [x] Botón para actualizar de la lista de películas
-- [x] Avance/retroceso rápido
-- [x] Ventana de progreso al procesar películas
-- [x] Calidad HD y *4K (Próximamente)*
+- [x] 📂 Interfaz fácil de usar
+- [x] 🏷 Soporte completo de la API de metadatos TMDB *(pósters, fanarts, descripciones, valoraciones...)*
+- [x] 🚫 Detección de enlaces no disponibles (offline)
+- [x] 🔄 Botón para actualizar de la lista de películas
+- [x] ⏩ Avance/retroceso fluido
+- [x] ⏳ Ventana de progreso al procesar películas
+- [x] ✨ Calidad HD y *4K (Próximamente)*
 ##### En desarollo
 - [ ] Menú principal
 - [ ] Varios hostings de archivos
