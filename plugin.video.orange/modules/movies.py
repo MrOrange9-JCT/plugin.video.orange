@@ -74,11 +74,13 @@ def getMovieUrl(movie):
 
             for host in url_list:
                 if host.startswith("https://pixeldrain"):
-                    list_item = xbmcgui.ListItem(f"Pixeldrain [COLOR darkseagreen][{movie_list[movie][1][1]}][/COLOR]")
+                    list_item = xbmcgui.ListItem("[COLOR darkseagreen]Pixeldrain[/COLOR]")
                     list_item.setArt({"thumb": main.getAddonMedia("pixeldrain.png")})
+                    list_item.setInfo("video", {"plot": f"{movie_list[movie][1][1]}"})
                 elif host.startswith("https://qiwi"):
-                    list_item = xbmcgui.ListItem(f"Qiwi [COLOR mediumpurple][{movie_list[movie][2][1]}][/COLOR]")
+                    list_item = xbmcgui.ListItem(f"[COLOR mediumpurple]Qiwi[/COLOR]")
                     list_item.setArt({"thumb": main.getAddonMedia("qiwi.png")})
+                    list_item.setInfo("video", {"plot": f"{movie_list[movie][2][1]}"})
 
                 list_items.append(list_item)
 
