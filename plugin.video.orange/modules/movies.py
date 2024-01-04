@@ -82,7 +82,7 @@ def getMovieUrl(movie):
 
                 list_items.append(list_item)
 
-            ret = dialog.select("Selecciona un host", list_items, preselect=0)
+            ret = dialog.select("Selecciona un host", list_items, preselect=0, useDetails = True)
         
         if preffered_host == 0 or (ask_everytime == True and ret == 0):
             return url_list[0]
@@ -178,9 +178,9 @@ def listMovies():
         if movie_available == True:
             list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR]")
         elif movie_available == "Pixeldrain":
-            list_item = xbmcgui.ListItem(f"[COLOR silver]{movie_metadata['title']}[/COLOR] [COLOR steelblue]({movie_metadata['year']})[/COLOR][COLOR darkseagreen] [Pixeldrain][/COLOR]")
+            list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR][COLOR darkseagreen] [Pixeldrain][/COLOR]")
         elif movie_available == "Qiwi":
-            list_item = xbmcgui.ListItem(f"[COLOR silver]{movie_metadata['title']}[/COLOR] [COLOR steelblue]({movie_metadata['year']})[/COLOR][COLOR mediumpurple] [Qiwi][/COLOR]")
+            list_item = xbmcgui.ListItem(f"{movie_metadata['title']} [COLOR blue]({movie_metadata['year']})[/COLOR][COLOR mediumpurple] [Qiwi][/COLOR]")
         else:
             list_item = xbmcgui.ListItem(f"[COLOR silver]{movie_metadata['title']}[/COLOR] [COLOR steelblue]({movie_metadata['year']})[/COLOR][COLOR red][B] [NO DISPONIBLE][/B][/COLOR]")
             
