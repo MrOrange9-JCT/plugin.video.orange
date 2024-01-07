@@ -2,7 +2,7 @@
 <settings>
   <category label="General">
     <setting label="Hosting" type="lsep"/>
-    <setting label="Hosting preferido" type="enum" id="preffered_host" values="Pixeldrain.com|Qiwi.gg" />
-    <setting label="Preguntar siempre" type="bool" id="ask_everytime" default="false" subsetting="true"/>
+    <setting label="Hosting preferido" type="enum" id="preffered_host" values="Pixeldrain.com|Qiwi.gg" enable="false" />
+    <setting label="Preguntar siempre" type="bool" id="ask_everytime" default="false" subsetting="true" enable="false"/>
   </category>
 </settings>
