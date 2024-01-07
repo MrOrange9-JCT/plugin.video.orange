@@ -44,13 +44,13 @@ def getAddonMedia(media: str = None):
 def mainMenu():
     """Main menu"""
     xbmcplugin.addDirectoryItem(__handle__, __url__ + "?folder=movies", xbmcgui.ListItem("Películas"), isFolder=True)
-    xbmcplugin.addDirectoryItem(__handle__, __url__ + "?button=settings", xbmcgui.ListItem("Ajustes"), isFolder=True)
+    xbmcplugin.addDirectoryItem(__handle__, __url__ + "?action=settings", xbmcgui.ListItem("Ajustes"), isFolder=True)
 
     xbmcplugin.endOfDirectory(__handle__)
 
 if __name__ == "__main__":
     folder = __args__.get("folder", None)
-    button = __args__.get("button", None)
+    action = __args__.get("button", None)
     
     """if folder is None:
         mainMenu()

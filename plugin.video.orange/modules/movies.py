@@ -33,8 +33,6 @@ def getMovieMetadata(movie_title, requested_metadata = None):
         except:
             genres = [r["genres"][0]["name"]]
 
-    
-
     metadata = {"title": r["title"],
                 "year": int(r["release_date"].split("-")[0]),
                 "aired": r["release_date"],
@@ -50,6 +48,21 @@ def getMovieMetadata(movie_title, requested_metadata = None):
         return metadata[requested_metadata]
     else:
         return metadata
+
+def getSortTitle(movie_title, metadata):
+    """Get the sort title of a movie"""
+    sort_title = movie_title
+    
+    if sort_method == "Título":
+        sort_title = movie_title
+    if sort_method == "Año":
+        sort_title = str(metadata['year']) + " " + movie_title
+    if sort_method == "Valoración":
+        sort_title = str(metadata['rating']) + " " + movie_title
+    if sort_method == "Duración":
+        sort_title = str(metadata['duration']) + " " + movie_title
+
+    return sort_title
 
 def getMovieList():
     """"Get the updated movie list from Rentry.co"""
@@ -189,7 +202,7 @@ def listMovies():
         list_item.setInfo("video", {"genre": movie_metadata['genres'],
                                     "rating": movie_metadata['rating'],
                                     "duration": movie_metadata['duration'],
-                                    "sorttitle": movie,
+                                    "sorttitle": getSortTitle(movie, movie_metadata),
                                     "plotoutline": movie_metadata['tagline'],
                                     "plot": f"[COLOR lime]{movie_metadata['rating']}[/COLOR] - [COLOR silver]{str(movie_metadata['genres'])[1:-1]}[/COLOR]\n[I]{movie_metadata['tagline']}[/I]\n\n{movie_metadata['plot']}"})
 
@@ -214,15 +227,55 @@ def listMovies():
 
     print("ALL MOVIES PROCESSED") 
 
+def listMenuItems():
+    fanart = main.getAddonMedia("fanart.png")
 
-def _main(): 
-    update_list = xbmcgui.ListItem("[COLOR lime] - Actualizar lista de películas - [/COLOR]")
+    update_list = xbmcgui.ListItem("[COLOR orangered]Actualizar lista de películas[/COLOR]")
     update_icon = main.getAddonMedia("iconRefresh.png")
-    update_list.setArt({"thumb": update_icon, "icon": update_icon, "fanart": main.getAddonMedia("fanart.png")})
-    print("Fanart: " + xbmcaddon.getAddonInfo('fanart'))
+    update_list.setArt({"thumb": update_icon, "icon": update_icon, "fanart": fanart})
+    update_list.setInfo("video", {"plot": "Volver a descargar y procesar la lista de películas",
+                                "sorttitle": "*1* Actualizar lista de películas"})
+
+    sort_list = xbmcgui.ListItem("[COLOR orangered]Ordenar por[/COLOR]")
+    sort_icon = main.getAddonMedia("iconSort.png")
+    sort_list.setArt({"thumb": sort_icon, "icon": sort_icon, "fanart": fanart})
+    sort_list.setInfo("video", {"plot": "Ordenar la lista de películas (Título, año, valoración...)",
+                                "sorttitle": "*2* Ordenar por"})
 
     xbmcplugin.addDirectoryItem(handle=__handle__, url=updateMovieList(), listitem=update_list, isFolder=True)
+    xbmcplugin.addDirectoryItem(handle=__handle__, url=__url__ + "?action=sort", listitem=sort_list, isFolder=True)
 
+def sortDialog():
+    """Show the sort dialog"""
+    
+    sortDialog = xbmcgui.Dialog()
+    sorting_methods = ["Título", "Año", "Valoración", "Duración"]
+
+    ret = sortDialog.select("Ordenar por...", sorting_methods, preselect=xbmcaddon.getSetting("sort_method"), useDetails = True)
+
+    global sort_method
+    if ret == 0:
+        sort_method = "Título"
+    elif ret == 1:
+        sort_method = "Año"
+    elif ret == 2:
+        sort_method = "Valoración"
+    elif ret == 3:
+        sort_method = "Duración"
+
+    return updateMovieList()
+
+sort_method = xbmcaddon.getSetting("sort_method")
+
+def _main(): 
+    """Main function"""
+    global movie_list
+    movie_list = getMovieList()
+
+    listMenuItems()
     listMovies()
 
+    if __args__.get("action", None) == "sort":
+        sortDialog()
+        
     xbmcplugin.endOfDirectory(__handle__)

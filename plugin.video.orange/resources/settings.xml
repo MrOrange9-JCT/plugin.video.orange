@@ -4,5 +4,7 @@
     <setting label="Hosting" type="lsep"/>
     <setting label="Hosting preferido" type="enum" id="preffered_host" values="Pixeldrain.com|Qiwi.gg" enable="false" />
     <setting label="Preguntar siempre" type="bool" id="ask_everytime" default="false" subsetting="true" enable="false"/>
+    <setting label="Buscar y ordenar" type="lsep"/>
+    <setting label="Orden predeterminado" type="enum" id="sort_method" values="Título|Año|Valoración|Duración"/> 
   </category>
 </settings>
